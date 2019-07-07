@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Facebook Login JavaScript Example</title>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <script src="https://kit.fontawesome.com/752410f62b.js"></script>
+  <script src="js/vue.js"></script>
+<script>
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    if (response.status === 'connected') {
+      testAPI();
+      document.getElementById("application").style.display = "block";
+    } else {
+
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+        document.getElementById("application").style.display = "none";
+    }
+  }
+
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '647239575751929',
+      cookie     : true,   
+                          
+      xfbml      : true,  
+      version    : 'v3.3' 
+    });
+
+     
+          FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+      
+      
+    
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+
+  function testAPI() {
+
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+        document.getElementById("fcAuthButton").style.display = "none";
+        document.getElementById("status").style.display = "none";
+        document.getElementById("application").style.display = "block";
+        var app = new Vue({
+              el: '#application',
+              data: {
+                name: response.name,
+                selectedMyAnsw: "Нужно выбрать",
+                numb: 0,
+                arrsUsers: [],
+                answers: [],
+                search: "",
+              },
+               mounted() {
+                    let usersPars = JSON.parse(localStorage.getItem('users'));
+                    for (var i = 0; i < usersPars.length; i++) {
+                        if (usersPars[i][0] === this.name) {
+                                this.name = usersPars[i][0];
+                                this.selectedMyAnsw = usersPars[i][1];
+                                this.numb = usersPars[i][2];
+
+                              }
+                              this.answers.push({
+                                  users: [
+                                    { name: usersPars[i][0] }, 
+                                    { withMe: usersPars[i][1] }, 
+                                    { comeWill: usersPars[i][2] }
+                                  ]
+                                });
+                              
+                          }
+                  },
+                  computed: {
+        filteredData: function () {
+            var search_array = this.answers,
+                searchString = this.search;
+
+            if(!searchString){
+                return search_array;
+            }
+             
+                  searchString = searchString.trim().toLowerCase();
+            search_array = search_array.filter(function(item){
+              if (item.users[0].name === undefined) {
+                console.log("UNDEFINED");
+              }else{
+                if (item.users[0].name.toLowerCase().indexOf(searchString) !== -1) {
+                  return item;
+                  
+                }
+              }
+                
+            });
+                
+            return search_array;
+        }
+    },
+                methods:{
+                  sendMyAnswers: function(event){
+                      if (this.selectedMyAnsw == "Нужно выбрать") {
+                          document.querySelector("#application .message").style.display = "flex";
+                          setTimeout(function(){
+                              document.querySelector("#application .message").style.display = "none";
+                          }, 1500);
+                      }else{
+                          
+                           document.querySelector("#application .message_suc").style.display = "flex";
+                          setTimeout(function(){
+                              document.querySelector("#application .message_suc").style.display = "none";
+                          }, 1500);
+                            this.arrsUsers.push([this.name, this.selectedMyAnsw, this.numb]);
+                                 let parsed = JSON.stringify(this.arrsUsers);
+
+                                  
+                                    if (localStorage.getItem('users')) {
+                                      let usersPars = JSON.parse(localStorage.getItem('users'));
+                                      let usersAdd = [];
+                                      for (var i = 0; i < usersPars.length; i++) {
+                                    if (usersPars[i][0] === this.name) {
+                                      usersAdd.push(0);
+                                      usersPars[i].splice(0);
+                                      usersPars[i].push(this.name, this.selectedMyAnsw, this.numb);
+                                      localStorage.users = JSON.stringify(usersPars);
+                                    }else{
+                                        usersAdd.push(1);
+                                    }
+                                  }
+
+                                  
+
+                                    if (usersAdd.indexOf(0) === -1) {
+                                      usersPars.push([this.name, this.selectedMyAnsw, this.numb]);
+                                      localStorage.users = JSON.stringify(usersPars);
+                                    }
+                                  
+
+                                    }else{
+                                      localStorage.users = parsed;
+                                    }
+                                  
+                                 
+                          
+                      }
+                  },
+                  answerItem: function(){
+                      document.querySelector(".viewUser").style.display = "block";
+                },
+
+                delNot: function(){
+                      document.querySelector(".viewUser").style.display = "none";
+                },
+
+                tabsClick:function(){
+                  console.log(123);
+                    this.answers = [];
+                      let usersPars = JSON.parse(localStorage.getItem('users'));
+                    for (var i = 0; i < usersPars.length; i++) {
+                        if (usersPars[i][0] === this.name) {
+                                this.name = usersPars[i][0];
+                                this.selectedMyAnsw = usersPars[i][1];
+                                this.numb = usersPars[i][2];
+
+                              }
+                              this.answers.push({
+                                  users: [
+                                    { name: usersPars[i][0] }, 
+                                    { withMe: usersPars[i][1] }, 
+                                    { comeWill: usersPars[i][2] }
+                                  ]
+                                });
+                              
+                          }
+                },
+
+                acceptDelete: function(name){
+                  this.answers = [];
+                     if (localStorage.getItem('users')) {
+
+                                      let usersPars = JSON.parse(localStorage.getItem('users'));
+                                      for (var i = 0; i < usersPars.length; i++) {
+                                    if (name === usersPars[i][0]) {
+                                      usersPars[i].splice(0);
+                                      localStorage.users = JSON.stringify(usersPars);
+                                      document.querySelector(".viewUser").style.display = "none";
+                                    }
+                                    this.answers.push({
+                                  users: [
+                                    { name: usersPars[i][0] }, 
+                                    { withMe: usersPars[i][1] }, 
+                                    { comeWill: usersPars[i][2] }
+                                  ]
+                                });
+                                  }
+                            }    
+                }
+
+              }
+
+            })
+
+
+        let elemApps = document.querySelector('#application .tabs').children;
+     for (var i = 0; i < elemApps.length; i++) {
+        let elevFor = elemApps[i];
+          elemApps[i].onclick = function(){
+        let activeElem = document.querySelector('#application .tabs .active');
+        let idTabs = this.getAttribute("id");
+        let activeTabsView = document.querySelector('#application .containerViewTabs .active');
+        let newElemTabsView = document.querySelector(`#application .containerViewTabs #${idTabs}`);
+            activeElem.classList.remove("active");
+          this.classList.add("active");
+          activeTabsView.classList.remove("active");
+          newElemTabsView.classList.add("active");
+          }
+     }
+        
+    });
+
+
+  }
+  
+  
+   
+        
+</script>
+
+
+
+
+<fb:login-button id="fcAuthButton" scope="public_profile,email" onclick="checkLoginState();">
+</fb:login-button>
+
+
+<div id="status">
+</div>
+
+
+<div id="application">
+      <div class="tabs">
+        <div class="item active" id="myAnswer" v-on:click="tabsClick">
+          <p>My Answer</p>
+        </div>
+        <div class="item" id="allAnswer" v-on:click="tabsClick">
+          <p>All answer</p>
+        </div>
+      </div>
+
+      <div class="containerViewTabs">
+        <div class="tabView active" id="myAnswer">
+
+          <div class="message">
+            <h2>Заполните форму, когда все будет известно</h2>
+          </div>
+          <div class="message_suc">
+            <h2>Запись добавлена</h2>
+          </div>
+            <div class="form">
+              <div class="form-input">
+                  <label for="">ME</label>
+              <input type="text" placeholder="me" disabled v-model="name">
+              </div>
+                <div class="form-input">
+                  <label for="">With me</label>
+                    <input type="number" v-model="numb">
+                </div>
+
+                <div class="form-input">
+                    <select name="select" v-model="selectedMyAnsw">
+                      <option value="Нужно выбрать" selected>Нужно выбрать</option>
+                      <option value="я точно приду">я точно приду</option>
+                      <option value="я точно не приду">я точно не приду</option>
+                    </select>
+                </div>
+
+              
+
+              <div class="form-input">
+                <button v-on:click="sendMyAnswers" id="sendMyAnswer">
+                  Send
+                </button>
+              </div>
+            </div>
+        </div>
+        <div class="tabView" id="allAnswer">
+              <div class="form">
+              <div class="form-input-search">
+                  <label for="">Search</label>
+              <input type="text" placeholder="search" v-model="search">
+              </div>
+              </div>
+
+              <div class="viewAnswer">
+
+                <div v-for="item in filteredData">
+                  <div class="active" v-if="item.users[0].name == name && item.users[0].name" v-on:click="answerItem">
+                    <div class="inf">{{ item.users[0].name }}</div>
+                    <div class="inf">{{ item.users[1].withMe }}</div>
+                    <div class="inf" v-if="item.users[2].comeWill != 0 && item.users[1].withMe == 'я точно приду'">{{ item.users[2].comeWill }}</div>
+                    <div class="inf" v-if="item.users[1].withMe == 'я точно приду'">
+                      <i class="fas fa-check-circle"></i>
+                    </div>
+                  </div>
+                  <div class="itemAnsw" v-else-if="item.users[0].name">
+                    <div class="inf">{{ item.users[0].name }}</div>
+                    <div class="inf">{{ item.users[1].withMe }}</div>
+                    <div class="inf" v-if="item.users[2].comeWill != 0 && item.users[1].withMe == 'я точно приду'">{{ item.users[2].comeWill }}</div>
+                    <div class="inf" v-if="item.users[1].withMe == 'я точно приду'">
+                      <i class="fas fa-check-circle"></i>
+                    </div>
+                  </div>
+                
+              </div>
+
+              <div class="viewUser" >
+                 <div class="name">Я {{ name }} хочу отказаться от своего решения и удалить свой ответ</div> 
+                <button v-on:click="acceptDelete(name)">Да</button> <button v-on:click="delNot">Нет</button>
+              </div>
+        </div>
+      </div>
+</div>
+
+
+
+
+</body>
+</html>
+
+

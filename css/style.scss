@@ -1,0 +1,210 @@
+#fcAuthButton{
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+#application{
+	width: 700px;
+	margin: 0 auto;
+	display: none;
+	position: relative;
+
+
+
+	.message{
+	display: none;
+    width: 100%;
+    background: #ff5151;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    transition: all 1s;
+	}
+	.message_suc{
+		display: none;
+    width: 100%;
+    background: #16b363;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    transition: all 1s;
+	}
+	.tabs{
+			display: flex;
+		    flex-direction: row;
+		    justify-content: space-around;
+
+		    .item{
+		    	width: 100%;
+		    	background-color: #1687dd;
+		    	text-align: center;
+		    	color: #fff;
+		    	cursor: pointer;
+		    	transition: all .5s;
+		    }
+
+		    .item:hover{
+		    	background-color: #2b2d39;
+		    }
+
+		    .item.active{
+		    	background-color: #2b2d39;
+		    }
+	}
+
+	.containerViewTabs{
+
+			.tabView{
+				display: none;
+				&.active{
+					display: block;
+				}
+			}
+
+		.tabView{
+				.form-input{
+				padding:20px;
+
+				input{
+					width:200px;
+					border-radius: 10px;
+					border: 1px solid #000;
+					margin-left: 20px;
+					padding: 10px 10px;
+				}
+				input:focus{
+					outline: none;
+				}
+				label{
+					display: flex;
+					margin-left: 20px;
+					padding-bottom: 10px;
+					font-weight: bold;
+					text-transform: uppercase;
+				}
+				select{
+					width:200px;
+					border-radius: 10px;
+					border: 1px solid #000;
+					margin-left: 20px;
+					padding: 10px 10px;
+				}
+
+				select:focus{
+					outline: none;
+				}	
+
+				button{
+					background-color: #fff;
+					border: 1px solid #000;
+					padding: 10px 30px;
+					transition: all .5s;
+					cursor: pointer;
+
+					&:hover{
+						background-color: #000;
+						color:#fff;
+					}
+				}	
+			}
+
+			.form-input-search{
+					padding:20px;
+					input{
+					width:200px;
+					border-radius: 10px;
+					border: 1px solid #000;
+					margin-left: 20px;
+					padding: 10px 10px;
+				}
+				input:focus{
+					outline: none;
+				}
+				label{
+					display: flex;
+					margin-left: 20px;
+					padding-bottom: 10px;
+					font-weight: bold;
+					text-transform: uppercase;
+				}
+				}
+
+			.form-input:last-child{
+				text-align: right;
+			}
+		}
+			
+
+			
+	}
+
+	#allAnswer .viewAnswer{
+		
+		.active{
+			background-color: #1687dd;
+			color:#fff;
+			padding: 20px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all .5s;
+			display: flex;
+    		justify-content: space-around;
+			&:hover{
+				background-color: #2b2d39;
+			}
+		}
+		.itemAnsw{
+			background-color: #28537f;
+			color:#fff;
+			padding: 20px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all .5s;
+			display: flex;
+    		justify-content: space-around;
+			&:hover{
+				background-color: #2b2d39;
+			}
+		}
+
+		.viewUser{
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: #fff;
+			width: 100%;
+			height: 100%;
+			text-align:center;
+			display: none;
+			box-shadow: 1px 0px 5px #b0b0b0;
+			padding: 20px;
+
+			.name{
+				font-size: 1.5em;
+				font-weight: bold;
+
+			}
+
+			button{
+				display: inline-flex;
+				flex-direction: row;
+				cursor: pointer;
+				background-color: #1687dd;
+				color: #fff;
+				border:none;
+				padding: 10px 20px;
+				margin: 10px;
+			}
+		}
+
+	}
+
+
+}
